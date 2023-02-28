@@ -14,13 +14,13 @@ import time
 
 
 def create_test_file(file_path, size_in_megabytes):
-    with open(file_path, 'wb') as bigfile:
+    with open(file_path, "wb") as bigfile:
         bigfile.seek(size_in_megabytes * 1024 * 1024)
-        bigfile.write(b'0')
+        bigfile.write(b"0")
 
 
 def clear_uploads():
-    upload_path = os.path.join(settings.MEDIA_ROOT, 'admin_uploaded')
+    upload_path = os.path.join(settings.MEDIA_ROOT, "admin_uploaded")
     if not os.path.exists(upload_path):
         return
     for the_file in os.listdir(upload_path):
@@ -40,12 +40,15 @@ def test_fake_file_upload(admin_user, admin_client):
     payload = client_module.FakePayload()
 
     def form_value_list(key, value):
-        return ['--' + client_module.BOUNDARY,
-                'Content-Disposition: form-data; name="%s"' % key,
-                "",
-                value]
+        return [
+            "--" + client_module.BOUNDARY,
+            'Content-Disposition: form-data; name="%s"' % key,
+            "",
+            value,
+        ]
+
     form_vals = []
-    file_data = 'foo bar foo bar.'
+    file_data = "foo bar foo bar."
     file_size = str(len(file_data))
     form_vals += form_value_list("resumableChunkNumber", "1")
     form_vals += form_value_list("resumableChunkSize", file_size)
@@ -56,29 +59,32 @@ def test_fake_file_upload(admin_user, admin_client):
     form_vals += form_value_list("resumableTotalSize", file_size)
     form_vals += form_value_list("content_type_id", str(foo_ct.id))
     form_vals += form_value_list("field_name", "foo")
-    payload.write('\r\n'.join(form_vals + [
-        '--' + client_module.BOUNDARY,
-        'Content-Disposition: form-data; name="file"; filename=foo.bar',
-        'Content-Type: application/octet-stream',
-        '',
-        file_data,
-        '--' + client_module.BOUNDARY + '--\r\n'
-    ]))
+    payload.write(
+        "\r\n".join(
+            form_vals
+            + [
+                "--" + client_module.BOUNDARY,
+                'Content-Disposition: form-data; name="file"; filename=foo.bar',
+                "Content-Type: application/octet-stream",
+                "",
+                file_data,
+                "--" + client_module.BOUNDARY + "--\r\n",
+            ]
+        )
+    )
 
     r = {
-        'CONTENT_LENGTH': len(payload),
-        'CONTENT_TYPE': client_module.MULTIPART_CONTENT,
-        'PATH_INFO': "/admin_resumable/upload/",
-        'REQUEST_METHOD': 'POST',
-        'wsgi.input': payload,
+        "CONTENT_LENGTH": len(payload),
+        "CONTENT_TYPE": client_module.MULTIPART_CONTENT,
+        "PATH_INFO": "/admin_resumable/upload/",
+        "REQUEST_METHOD": "POST",
+        "wsgi.input": payload,
     }
     response = admin_client.request(**r)
     assert response.status_code == 200
     upload_filename = file_size + "_foo.bar"
-    upload_path = os.path.join(settings.MEDIA_ROOT,
-                               upload_filename
-                               )
-    f = open(upload_path, 'r')
+    upload_path = os.path.join(settings.MEDIA_ROOT, upload_filename)
+    f = open(upload_path, "r")
     uploaded_contents = f.read()
     assert file_data == uploaded_contents
 
@@ -91,12 +97,15 @@ def test_fake_file_upload_incomplete_chunk(admin_user, admin_client):
     payload = client_module.FakePayload()
 
     def form_value_list(key, value):
-        return ['--' + client_module.BOUNDARY,
-                'Content-Disposition: form-data; name="%s"' % key,
-                "",
-                value]
+        return [
+            "--" + client_module.BOUNDARY,
+            'Content-Disposition: form-data; name="%s"' % key,
+            "",
+            value,
+        ]
+
     form_vals = []
-    file_data = 'foo bar foo bar.'
+    file_data = "foo bar foo bar."
     file_size = str(len(file_data))
     form_vals += form_value_list("resumableChunkNumber", "1")
     form_vals += form_value_list("resumableChunkSize", "3")
@@ -107,21 +116,26 @@ def test_fake_file_upload_incomplete_chunk(admin_user, admin_client):
     form_vals += form_value_list("resumableTotalSize", file_size)
     form_vals += form_value_list("content_type_id", str(foo_ct.id))
     form_vals += form_value_list("field_name", "foo")
-    payload.write('\r\n'.join(form_vals + [
-        '--' + client_module.BOUNDARY,
-        'Content-Disposition: form-data; name="file"; filename=foo.bar',
-        'Content-Type: application/octet-stream',
-        '',
-        file_data[0:1],
-        # missing final boundary to simulate failure
-    ]))
+    payload.write(
+        "\r\n".join(
+            form_vals
+            + [
+                "--" + client_module.BOUNDARY,
+                'Content-Disposition: form-data; name="file"; filename=foo.bar',
+                "Content-Type: application/octet-stream",
+                "",
+                file_data[0:1],
+                # missing final boundary to simulate failure
+            ]
+        )
+    )
 
     r = {
-        'CONTENT_LENGTH': len(payload),
-        'CONTENT_TYPE': client_module.MULTIPART_CONTENT,
-        'PATH_INFO': "/admin_resumable/admin_resumable/",
-        'REQUEST_METHOD': 'POST',
-        'wsgi.input': payload,
+        "CONTENT_LENGTH": len(payload),
+        "CONTENT_TYPE": client_module.MULTIPART_CONTENT,
+        "PATH_INFO": "/admin_resumable/admin_resumable/",
+        "REQUEST_METHOD": "POST",
+        "wsgi.input": payload,
     }
     try:
         admin_client.request(**r)
@@ -130,21 +144,21 @@ def test_fake_file_upload_incomplete_chunk(admin_user, admin_client):
 
     get_url = "/admin_resumable/admin_resumable/?"
     get_args = {
-        'resumableChunkNumber': '1',
-        'resumableChunkSize': '3',
-        'resumableCurrentChunkSize': '3',
-        'resumableTotalSize': file_size,
-        'resumableType': "text/plain",
-        'resumableIdentifier': file_size + "-foobar",
-        'resumableFilename': "foo.bar",
-        'resumableRelativePath': "foo.bar",
-        'content_type_id': str(foo_ct.id),
-        'field_name': "foo",
+        "resumableChunkNumber": "1",
+        "resumableChunkSize": "3",
+        "resumableCurrentChunkSize": "3",
+        "resumableTotalSize": file_size,
+        "resumableType": "text/plain",
+        "resumableIdentifier": file_size + "-foobar",
+        "resumableFilename": "foo.bar",
+        "resumableRelativePath": "foo.bar",
+        "content_type_id": str(foo_ct.id),
+        "field_name": "foo",
     }
 
     # we need a fresh client because client.request breaks things
     fresh_client = client_module.Client()
-    fresh_client.login(username=admin_user.username, password='password')
+    fresh_client.login(username=admin_user.username, password="password")
     get_response = fresh_client.get(get_url, get_args)
     # should be a 404 because we uploaded an incomplete chunk
     assert get_response.status_code == 404
@@ -155,27 +169,24 @@ def test_real_file_upload(admin_user, live_server, driver):
     test_file_path = "/tmp/test_small_file.bin"
     create_test_file(test_file_path, 5)
 
-    driver.get(live_server.url + '/admin/')
-    driver.find_element_by_id('id_username').send_keys("admin")
-    driver.find_element_by_id("id_password").send_keys("password")
-    driver.find_element_by_xpath('//input[@value="Log in"]').click()
+    driver.get(live_server.url + "/admin/")
+    driver.find_element(By.ID, "id_username").send_keys("admin")
+    driver.find_element(By.ID, "id_password").send_keys("password")
+    driver.find_element(By.XPATH, '//input[@value="Log in"]').click()
     driver.implicitly_wait(2)
-    driver.get(live_server.url + '/admin/tests/foo/add/')
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "id_bar"))
-    )
-    driver.find_element_by_id("id_bar").send_keys("bat")
-    driver.find_element_by_id(
-        'id_foo_input_file').send_keys(test_file_path)
-    status_text = driver.find_element_by_id("id_foo_uploaded_status").text
+    driver.get(live_server.url + "/admin/tests/foo/add/")
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "id_bar")))
+    driver.find_element(By.ID, "id_bar").send_keys("bat")
+    driver.find_element(By.ID, "id_foo_input_file").send_keys(test_file_path)
+    status_text = driver.find_element(By.ID, "id_foo_uploaded_status").text
     print("status_text", status_text)
     i = 0
     while i < 5:
-        if "Uploaded" in status_text:
+        if "Uploaded" in driver.find_element(By.ID, "id_foo_uploaded_status").text:
             return  # success
         time.sleep(1)
         i += 1
-    raise Exception  # something went wrong
+    assert False, f"Status text is '{driver.find_element(By.ID, 'id_foo_uploaded_status').text}'; expected 'Uploaded"
 
 
 @pytest.mark.django_db
@@ -183,24 +194,21 @@ def test_real_file_upload_with_upload_to(admin_user, live_server, driver):
     test_file_path = "/tmp/test_small_file.bin"
     create_test_file(test_file_path, 5)
 
-    driver.get(live_server.url + '/admin/')
-    driver.find_element_by_id('id_username').send_keys("admin")
-    driver.find_element_by_id("id_password").send_keys("password")
-    driver.find_element_by_xpath('//input[@value="Log in"]').click()
+    driver.get(live_server.url + "/admin/")
+    driver.find_element(By.ID, "id_username").send_keys("admin")
+    driver.find_element(By.ID, "id_password").send_keys("password")
+    driver.find_element(By.XPATH, '//input[@value="Log in"]').click()
     driver.implicitly_wait(2)
-    driver.get(live_server.url + '/admin/tests/foo/add/')
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "id_bar"))
-    )
-    driver.find_element_by_id("id_bar").send_keys("bat")
-    driver.find_element_by_id(
-        'id_bat_input_file').send_keys(test_file_path)
-    status_text = driver.find_element_by_id("id_bat_uploaded_status").text
+    driver.get(live_server.url + "/admin/tests/foo/add/")
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "id_bar")))
+    driver.find_element(By.ID, "id_bar").send_keys("bat")
+    driver.find_element(By.ID, "id_bat_input_file").send_keys(test_file_path)
+    status_text = driver.find_element(By.ID, "id_bat_uploaded_status").text
     print("status_text", status_text)
     i = 0
     while i < 5:
-        if "Uploaded" in status_text:
+        if "Uploaded" in driver.find_element(By.ID, "id_bat_uploaded_status").text:
             return  # success
         time.sleep(1)
         i += 1
-    raise Exception  # something went wrong
+    assert False, f"Status text is {driver.find_element(By.ID, 'id_bat_uploaded_status').text}; Expected 'Uploaded'"

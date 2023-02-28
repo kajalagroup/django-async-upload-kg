@@ -1,12 +1,12 @@
 import django
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 
 
 urlpatterns = [
-    url(r'^admin_resumable/', include('admin_async_upload.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin_resumable/', include('admin_async_upload.urls')),
+    path('admin/', admin.site.urls),
 ]
 
 
