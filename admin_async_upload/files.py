@@ -2,6 +2,7 @@
 import fnmatch
 import tempfile
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.utils.functional import cached_property
 
@@ -39,7 +40,8 @@ class ResumableFile(object):
 
     @property
     def storage_filename(self):
-        return self.resumable_storage.full_filename(self.filename, self.upload_to)
+        instance = self.field.model.objects.filter(pk=self.params.get("instance_id")).first()
+        return self.resumable_storage.full_filename(self.filename, self.upload_to, instance=instance)
 
     @property
     def upload_to(self):

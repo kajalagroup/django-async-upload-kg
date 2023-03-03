@@ -30,7 +30,8 @@ if (typeof djangoAdminResumableFieldListenerSetUp=="undefined")
             query: {
                 csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
                 field_name: '{{ field_name }}',                 {# FIXME: this probably should be checked at run time for added inlines #}
-                content_type_id: '{{ content_type_id }}'        {# FIXME: this probably should be checked at run time for added inlines #}
+                content_type_id: '{{ content_type_id }}',       {# FIXME: this probably should be checked at run time for added inlines #}
+                instance_id: '{{ instance_id }}'
             },
             simultaneousUploads: {{ simultaneous_uploads }}, //3 is better, 1 is used for local testing;
         });
