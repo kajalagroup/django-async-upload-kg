@@ -1,34 +1,12 @@
 language: python
 
 python:
-  - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.9"
-  - "3.10"
+  - "3.11"
 
 sudo: false
 
 env:
-    - TOX_ENV=py36-django3.0.14
-    - TOX_ENV=py36-django3.1.14
-    - TOX_ENV=py36-django3.2.18
-    - TOX_ENV=py37-django3.0.14
-    - TOX_ENV=py37-django3.1.14
-    - TOX_ENV=py37-django3.2.18
-    - TOX_ENV=py38-django3.0.14
-    - TOX_ENV=py38-django3.1.14
-    - TOX_ENV=py38-django3.2.18
-    - TOX_ENV=py39-django3.0.14
-    - TOX_ENV=py39-django3.1.14
-    - TOX_ENV=py39-django3.2.18
-    - TOX_ENV=py38-django4.0.14
-    - TOX_ENV=py38-django4.1.7
-    - TOX_ENV=py39-django4.0.10
-    - TOX_ENV=py39-django4.1.7
-    - TOX_ENV=py310-django4.0.10
-    - TOX_ENV=py310-django4.1.7
-
+    - TOXENV=py310-dj42
 
 matrix:
     fast_finish: true

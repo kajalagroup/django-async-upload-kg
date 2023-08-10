@@ -1,26 +1,15 @@
-django-admin-async-upload
+django-async-upload
 ===============================
 
-.. image:: https://api.travis-ci.org/jonatron/django-admin-resumable-js.svg?branch=master
-   :target: https://travis-ci.org/jonatron/django-admin-resumable-js
+django-async-upload is a django app to allow you to upload large files from within the django admin site asynchrously, that means that you can add any number of files on the admin page (e.g. through inline models) and continue editing other fields while files are uploading.
 
-django-admin-async-upload is a django app to allow you to upload large files from within the django admin site asynchrously (using ajax), that means that you can add any number of files on the admin page (e.g. through inline models) and continue editing other fields while files are uploading.
-
-django-admin-async-file-uploads is compatible with django-storages (tested with S3Storage)
-
-
-Screenshot
-----------
-
-#TODO: update this screenshot
-
-.. image:: https://github.com/jonatron/django-admin-resumable-js/raw/master/screenshot.png?raw=true
+django-async-upload is compatible with django-storages (tested with S3Storage)
 
 
 Installation
 ------------
 
-* pip install django-admin-async-upload
+* pip install django-async-upload
 * Add ``admin_async_upload`` to your ``INSTALLED_APPS``
 * Add ``url(r'^admin_async_upload/', include('admin_async_upload.urls')),`` to your urls.py
 * Add a model field eg: ``from admin_resumable.models import ResumableFileField``
@@ -45,21 +34,22 @@ Optionally:
 Versions
 --------
 
-
-
+4.0.0   - inital fork of django-admin-async-upload 3.0.4 with support for Django 4 and later
 
 
 Compatibility
 -------------
 
-Tested on Django 2.2 running on python 3.6 and 3.7
+Tested on Django 4.2 running on python 3.11
 
 Thanks to
 ---------
 
 original django-admin-resumable-js by jonatron https://github.com/jonatron/django-admin-resumable-js 
 
-django-admin-resumable-js fork by roxel https://github.com/roxel/django-admin-resumable-js (django-admin-async-upload is based on this fork 
+django-admin-resumable-js fork by roxel https://github.com/roxel/django-admin-resumable-js
+
+django-admin-async-upload fork by DataGreed https://github.com/DataGreed/django-admin-async-upload
 
 Resumable.js https://github.com/23/resumable.js
 
