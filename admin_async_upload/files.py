@@ -40,7 +40,11 @@ class ResumableFile(object):
 
     @property
     def storage_filename(self):
-        instance = self.field.model.objects.filter(pk=self.params.get("instance_id")).first()
+        instance_id = self.params.get("instance_id")
+        if instance_id:
+            instance = self.field.model.objects.filter(pk=instance_id).first()
+        else:
+            instance = None
         return self.resumable_storage.full_filename(self.filename, self.upload_to, instance=instance)
 
     @property

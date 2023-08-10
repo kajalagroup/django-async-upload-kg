@@ -33,8 +33,6 @@ class ResumableBaseWidget(FileInput):
         simultaneous_uploads = getattr(settings, 'ADMIN_SIMULTANEOUS_UPLOADS', 3)
 
         content_type_id = ContentType.objects.get_for_model(self.attrs['model']).id
-        instance = self.attrs.get('instance')
-        instance_id = instance.pk if instance else None
 
         context = {
             'name': name,
@@ -44,11 +42,14 @@ class ResumableBaseWidget(FileInput):
             'show_thumb': show_thumb,
             'field_name': self.attrs['field_name'],
             'content_type_id': content_type_id,
-            'instance_id': instance_id,
             'file_url': file_url,
             'file_name': file_name,
             'simultaneous_uploads': simultaneous_uploads,
         }
+
+        instance = self.attrs.get('instance')
+        if instance and instance.pk:
+            context['instance_id'] = instance.pk
 
         if not self.is_required:
             template_with_clear = '<span class="clearable-file-input">%(clear)s ' \
