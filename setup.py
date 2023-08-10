@@ -21,9 +21,9 @@ setup(
     license='MIT License',
     description='A Django app for the uploading of large files from the django admin site.',
     long_description=README,
-    url='https://github.com/jonatron/django-admin-resumable-js',
-    author='Alexey "DataGreed" Strelkov',
-    author_email='datagreed@gmail.com',
+    url='https://github.com/bit/django-async-upload',
+    author='j',
+    author_email='j@mailb.org',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
