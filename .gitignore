@@ -1,4 +1,5 @@
 # *
+/dev
 !/admin_resumable/**
 !/tests/**
 /tests/media/
@@ -47,3 +48,7 @@ nosetests.xml
 .venv
 .idea
 .DS_Store
+
+# additional
+/venv
+

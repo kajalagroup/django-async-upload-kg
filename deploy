@@ -1,0 +1,27 @@
+DIR=`pwd`
+PROJECT=`basename $DIR`
+REL=`parse-setup-version.py`
+echo "Making release $REL of $PROJECT"
+
+rm -rf dist
+rm -rf htmlcov
+python3 setup.py sdist
+
+# clean venv/ directory from the dist
+# TODO: cleaner way to do this (using setup.py/MANIFEST.in)
+cd dist
+FILE="$PROJECT-$REL"
+echo $FILE
+cd dist
+tar xvf "$FILE.tar.gz"
+rm -f "$FILE/.covera*"
+for X in coverage.xml project logs .mypy_cache venv data .idea linecalc.conf; do
+    rm -rf "$FILE/$X"
+done
+find . -name "__pycache__" -type d -exec rm -r "{}" \;
+rm "$FILE.tar.gz"
+tar zcvf "$FILE.tar.gz" $FILE
+rm -rf $FILE
+cd ..
+
+# twine upload dist/$FILE.tar.gz
