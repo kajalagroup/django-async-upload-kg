@@ -1,6 +1,10 @@
 django-async-upload
 ===============================
 
+Based on fork from https://github.com/bit/django-async-upload. Allows install via pip:
+
+        pip install django-async-upload-kg
+
 django-async-upload is a django app to allow you to upload large files from within the django admin site asynchrously, that means that you can add any number of files on the admin page (e.g. through inline models) and continue editing other fields while files are uploading.
 
 django-async-upload is compatible with django-storages (tested with S3Storage)

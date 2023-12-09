@@ -7,7 +7,7 @@ README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='django-async-upload',
+    name='django-async-upload-kg',
     version='4.0.1',
     packages=['admin_async_upload'],
     include_package_data=True,
@@ -22,8 +22,8 @@ setup(
     description='A Django app for the uploading of large files from the django admin site.',
     long_description=README,
     url='https://github.com/bit/django-async-upload',
-    author='j',
-    author_email='j@mailb.org',
+    author='Kajala Group Ltd.',
+    author_email='support@kajala.com',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
@@ -31,7 +31,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
