@@ -1,9 +1,7 @@
 import datetime
-
 import posixpath
-from django.core.files.storage import get_storage_class
-
 from django.conf import settings
+from django.core.files.storage import get_storage_class, FileSystemStorage
 from django.utils.encoding import force_str
 
 
@@ -27,8 +25,10 @@ class ResumableStorage(object):
         Chunk storage should be highly available for the server as saved chunks must be copied by the server
         for saving merged version in persistent storage.
         """
-        storage_class = get_storage_class(self.chunk_storage_class_name)
-        return storage_class(*args, **kwargs)
+        # removed in Django 5.1:
+        # storage_class = get_storage_class(self.chunk_storage_class_name)
+        # return storage_class(*args, **kwargs)
+        return FileSystemStorage(*args, **kwargs)
 
     def get_persistent_storage(self, *args, **kwargs):
         """
@@ -37,8 +37,10 @@ class ResumableStorage(object):
 
         Defaults to django.core.files.storage.FileSystemStorage.
         """
-        storage_class = get_storage_class(self.persistent_storage_class_name)
-        return storage_class(*args, **kwargs)
+        # removed in Django 5.1:
+        # storage_class = get_storage_class(self.persistent_storage_class_name)
+        # return storage_class(*args, **kwargs)
+        return FileSystemStorage(*args, **kwargs)
 
     def full_filename(self, filename, upload_to, instance=None):
         if callable(upload_to):
