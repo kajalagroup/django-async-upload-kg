@@ -38,13 +38,14 @@ Optionally:
 Versions
 --------
 
+4.0.5   - Django 5.1 support
 4.0.0   - inital fork of django-admin-async-upload 3.0.4 with support for Django 4 and later
 
 
 Compatibility
 -------------
 
-Tested on Django 4.2 running on python 3.11
+Tested on Django 4.x and 5.1 running on python 3.10 and 3.11
 
 Thanks to
 ---------
