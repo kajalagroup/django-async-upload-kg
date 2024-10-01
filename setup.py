@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-async-upload-kg',
-    version='4.0.1',
+    version='4.0.2',
     packages=['admin_async_upload'],
     include_package_data=True,
     package_data={
