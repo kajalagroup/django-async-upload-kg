@@ -1,7 +1,7 @@
 import datetime
 import posixpath
 from django.conf import settings
-from django.core.files.storage import get_storage_class, FileSystemStorage
+from django.core.files.storage import FileSystemStorage
 from django.utils.encoding import force_str
 
 
@@ -12,11 +12,12 @@ class ResumableStorage(object):
                                         getattr(settings, 'DEFAULT_FILE_STORAGE',
                                                 'django.core.files.storage.FileSystemStorage')
 
-        self.chunk_storage_class_name = getattr(
-            settings,
-            'ADMIN_RESUMABLE_CHUNK_STORAGE',
-            'django.core.files.storage.FileSystemStorage'
-        )
+        # get_storage_class removed in Django 5.1:
+        # self.chunk_storage_class_name = getattr(
+        #     settings,
+        #     'ADMIN_RESUMABLE_CHUNK_STORAGE',
+        #     'django.core.files.storage.FileSystemStorage'
+        # )
 
     def get_chunk_storage(self, *args, **kwargs):
         """
@@ -25,7 +26,7 @@ class ResumableStorage(object):
         Chunk storage should be highly available for the server as saved chunks must be copied by the server
         for saving merged version in persistent storage.
         """
-        # removed in Django 5.1:
+        # get_storage_class removed in Django 5.1:
         # storage_class = get_storage_class(self.chunk_storage_class_name)
         # return storage_class(*args, **kwargs)
         return FileSystemStorage(*args, **kwargs)
@@ -37,7 +38,7 @@ class ResumableStorage(object):
 
         Defaults to django.core.files.storage.FileSystemStorage.
         """
-        # removed in Django 5.1:
+        # get_storage_class removed in Django 5.1:
         # storage_class = get_storage_class(self.persistent_storage_class_name)
         # return storage_class(*args, **kwargs)
         return FileSystemStorage(*args, **kwargs)
